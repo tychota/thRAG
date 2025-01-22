@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "thrag"
+version = "0.0.1"
+description = "A RAG, initially for EU regulation on medical laws (including MDR, IVDR) and recomendations, that is derived from dsRAG and is really performant"
+authors = ["Tycho Tatitscheff <tychot@bam.tech>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
