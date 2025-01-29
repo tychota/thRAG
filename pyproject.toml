@@ -14,6 +14,7 @@ thrag = "thrag.cli:main"
 python = "^3.12"
 click = "^8.1.8"
 rich = "^13.9.4"
+structlog = "^25.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
