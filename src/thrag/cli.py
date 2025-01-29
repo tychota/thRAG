@@ -1,12 +1,11 @@
+import logging
 from time import sleep
 
-import logging
 import click
 import structlog
-
+from rich.console import Console
 from rich.logging import RichHandler
 from rich.progress import track
-from rich.console import Console
 
 from thrag.log import configure_logging
 
@@ -20,7 +19,7 @@ def configure_console_logging(log_level=logging.INFO):
         level=log_level,
         format="%(message)s",
         datefmt="[%X]",
-        handlers=[RichHandler(rich_tracebacks=True)]
+        handlers=[RichHandler(rich_tracebacks=True)],
     )
 
 
@@ -39,7 +38,7 @@ def main(iterations, debug):
     log_level = logging.DEBUG if debug else logging.INFO
     configure_logging(log_level=log_level)
     configure_console_logging(log_level=log_level)
-    
+
     logger.info("cli.start", message="Starting the CLI demo", iterations=iterations)
 
     # Show a Rich progress bar
