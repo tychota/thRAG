@@ -5,12 +5,15 @@ description = "A RAG, initially for EU regulation on medical laws (including MDR
 authors = ["Tycho Tatitscheff <tychot@bam.tech>"]
 license = "MIT"
 readme = "README.md"
+packages = [{ include = "thrag", from = "src" }]
+
+[tool.poetry.scripts]
+thrag = "thrag.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
 click = "^8.1.8"
 rich = "^13.9.4"
-
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
