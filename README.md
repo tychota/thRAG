@@ -13,7 +13,7 @@ Hopefully, you can use this in your project.
 
 First let's setup postgres:
 
-1. Install `postgres` and `pgvector`. 
+1. Install `postgres` and `pgvector`.
    On mac, for example :
   - `brew install postgresql`
   - `brew services start postgresql`
