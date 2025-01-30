@@ -5,19 +5,27 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/psf/black
-    rev: 25.1.0
+  - repo: local
     hooks:
       - id: black
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    # Ruff version.
-    rev: v0.9.3
+        name: black
+        entry: poetry run black --check
+        language: system
+        types: [file, python]
+        files: "^(src|test)/"
+  - repo: local
     hooks:
-      # Run the linter.
       - id: ruff
-      # Run the formatter.
-      # - id: ruff-format
-  - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.393
+        name: ruff
+        entry: poetry run ruff check
+        language: system
+        types: [file, python]
+        files: "^(src|test)/"
+  - repo: local
     hooks:
       - id: pyright
+        name: pyright
+        entry: poetry run pyright
+        language: system
+        types: [file, python]
+        files: "^(src|test)/"
