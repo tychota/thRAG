@@ -1,41 +1,45 @@
 from typing import List, Tuple
 
 import structlog
+from rich.progress import Progress
 
+from thrag.ingestion.chunking import chunk_text
 from thrag.ingestion.models import Chunk, Section
+from thrag.ingestion.pdf_processing import extract_pdf_images, parse_images_to_elements
+from thrag.ingestion.sectioning import semantic_sectioning
 
 logger = structlog.get_logger(__name__)
 
 
-def ingest_document(
-    pdf_path: str,
-    config: dict,
-) -> Tuple[List[Section], List[Chunk]]:
+def ingest_document(pdf_path: str, progress: Progress, config: dict) -> Tuple[List[Section], List[Chunk]]:
     """
     High-level pipeline to ingest a PDF, parse it, do semantic sectioning, chunking, etc.
+    Using placeholders for actual logic.
 
     :param pdf_path: Path to the PDF file
-    :param kb_id: Knowledge base ID (if relevant)
-    :param doc_id: Document ID (if relevant)
-    :param config: Ingestion config object (to be defined) with relevant params
-    :return: Tuple of (sections, chunks) or whatever final structure
+    :param progress: Rich Progress instance for sub-tasks
+    :param config: e.g. { "fallback_plan": [...], "some_other_config": ...}
     """
     logger.info("ingestion.start", pdf_path=pdf_path)
 
-    # 1. Convert PDF to images
-    page_image_paths = []  # call something like extract_pdf_images(...)  # noqa: F841
+    # Step 1: Extract images
+    image_paths = extract_pdf_images(pdf_path)
 
-    # 2. Parse images -> Elements
-    elements = []  # parse_images_to_elements(...)   # noqa: F841
+    # Step 2: Parse images with fallback
+    elements = parse_images_to_elements(
+        image_paths, progress=progress, fallback_plan=config.get("fallback_plan", [])
+    )
 
-    # 3. Possibly do fallback if elements are empty
-    # fallback_if_needed(...)
+    # Step 3: Sectioning
+    sections = semantic_sectioning(elements, progress=progress)
 
-    # 4. Section text
-    sections, document_lines = [], []  # noqa: F841
+    # Step 4: Chunking
+    chunks = chunk_text(sections, progress=progress)
 
-    # 5. Chunk it
-    chunks = []
-
-    logger.info("ingestion.end", section_count=len(sections), chunk_count=len(chunks))
+    logger.info(
+        "ingestion.end",
+        pdf_path=pdf_path,
+        section_count=len(sections),
+        chunk_count=len(chunks),
+    )
     return sections, chunks
